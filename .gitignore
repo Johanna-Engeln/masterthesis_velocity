@@ -6,6 +6,13 @@
 !.gitignore
 !environment.yml
 
+# Allow certain file types
+!*.py
+!*.ipynb
+!*.R
+!*.yaml
+!*.md
+
 # Do not push the data and anndata objects
 data/
 
@@ -15,6 +22,4 @@ enviroments/
 velocity-hypothesis-test/
 
 # Do not push the configs, results and scripts directly
-configs/
 results/
-script/
