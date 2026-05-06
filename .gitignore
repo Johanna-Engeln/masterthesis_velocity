@@ -1,0 +1,20 @@
+# I want to create this enviroment that everything blocked and only stuff I really want to push is pushed
+*
+# Allow to look into directories
+!*/
+# Allow gitignore and enviroment file
+!.gitignore
+!environment.yml
+
+# Do not push the data and anndata objects
+data/
+
+# Do not push the temporary file to create environments and the enviroment file
+pip_tmp/
+enviroments/
+velocity-hypothesis-test/
+
+# Do not push the configs, results and scripts directly
+configs/
+results/
+script/
