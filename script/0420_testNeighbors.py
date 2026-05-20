@@ -14,6 +14,11 @@ from velotest.neighbors import find_neighbors, find_neighbors_in_direction_of_ve
 from velotest.plotting import arrow_plot, plot_uniformity_histogram, plot_best_possible_velocities_statistic, \
     plot_statistic_distribution, plot_neighborhood, compute_angle_on_gridplot_between
 
+#### Comment: 
+# This script was used to generate the plots showing different neighborhood sizes for certain cells. 
+# With the help of those plots for each dataset a values for k was choosen to continue with the other analysis parts. 
+
+# Function for one neigbborhood plot
 def neighborhoods(Z_expr, adata, cell, figsize, nn_indices, selected_neighbors, dataset_name, number_neighbors):
     _, ax = plt.subplots(dpi=450, constrained_layout=True, figsize=figsize)
     plot_neighborhood(cell, adata.obsm[Z_expr], nn_indices, ax=ax, s=0.3, vector_friendly=True,
@@ -54,8 +59,7 @@ def main():
 
         adata = sc.read(config['path'])
         dataset_name = config['dataset_name']
-        basis = config['basis']
-        #neighbors = config['number_neighbors_to_sample_from']   
+        basis = config['basis'] 
 
         Z_expr = f"X_{basis}"
         Z_velocity_vector = f"velocity_{basis}"

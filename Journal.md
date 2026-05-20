@@ -2,6 +2,16 @@
 
 This journal are the private notes taken during the development. 
 
+## Week 21
+- Use subsamplig for k neighbors to 'proof' trend
+
+## Week 20
+- Meeting mit Manfred und Sebastian
+- Save bounds in anndata object
+- Tried to find formular explaniation for the linearity between self-transition and upper bound (check code an paper)
+- Finally started veloviz run
+- finished k computations
+
 ## Week 19
 - Create the github repository and start proper documentation
 - 5 of 19 datasets had problems running veloviz script, try to fix those
