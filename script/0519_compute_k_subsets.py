@@ -69,10 +69,21 @@ def bestVelocityEmbedded(adata, basis, num=200):
 def main():
     # Load preprocessed dataset
     datasets = {
+        "Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
+        "Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
+        "Dentate_gyrus": "configs/dentategyrus.yaml",
+        "Gastrulation_erythroid": "configs/gastrulation.yaml",
+        "Bone_marrow": "configs/bonemarrow.yaml",
         "PBMC": "configs/pbmc.yaml",
+        "Covid": "configs/covid.yaml",
+        "Retinal_development": "configs/retinal_development.yaml",
         "Human_HSC": "configs/humanHSC.yaml",
+        "Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
         "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml"
+        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
     }
 
     # Initialte object to store results
@@ -88,30 +99,42 @@ def main():
         adata = sc.read(config["path"])
         basis = config['basis']
         cluster = config['cluster']
-        fractions = [0.5, 0.25, 0.125]
+        model = config['model']
+        #fractions = [0.5, 0.25, 0.125]
+        cells = [2000]
 
         # Collect cluster fraction results and embeddings for each dataset
         cluster_fractions = {}
         cluster_fractions[f"{name}_original"] = adata.obs[cluster].value_counts()/adata.n_obs
+
         fig, ax = plt.subplots(1, 4, figsize=(20, 5), constrained_layout=True)
         scvelo.pl.scatter(adata, basis=basis, color=cluster, legend_loc='on data', ax=ax[0], title="original")
 
-        for i, frac in enumerate(fractions):
+        for i, frac in enumerate(cells): # Here change fraction and cells in this loop
             # Sample from dataset and collect cluster fraction information
-            adata_frac = sc.pp.sample(adata, fraction=frac, copy=True)
-            cluster_fractions[f"{name}_{frac}"] = adata_frac.obs[cluster].value_counts()/adata_frac.n_obs
+            adata_frac = sc.pp.sample(adata, n=cells, axis='obs', copy=True) # here otherwise fraction=frac
+            cluster_fractions[f"{name}_{cells}"] = adata_frac.obs[cluster].value_counts()/adata_frac.n_obs
+
+            scvelo.pp.filter_and_normalize(adata_frac, n_top_genes=2000)
+            scvelo.pp.moments(adata_frac, n_pcs=30, n_neighbors=30)
+            scvelo.tl.recover_dynamics(adata_frac, n_jobs=7)
+            scvelo.tl.velocity(adata_frac, mode=model)  
 
             # Recompute embedding and neighbors for sampled dataset
             if basis == 'umap':
                 sc.pp.neighbors(adata_frac)
                 sc.tl.umap(adata_frac)
+                scvelo.tl.velocity_graph(adata) 
+                scvelo.tl.velocity_embedding(adata, basis='umap')
             if basis == 'tsne':
                 sc.tl.tsne(adata_frac)
+                scvelo.tl.velocity_graph(adata) 
+                scvelo.tl.velocity_embedding(adata, basis='tsne')
             # Plot embedding for sampled dataset
-            scvelo.pl.scatter(adata_frac, basis=basis, color=cluster, legend_loc='on data', ax=ax[i+1], title=f"1/{int(1/frac)} fraction")
+            scvelo.pl.scatter(adata_frac, basis=basis, color=cluster, legend_loc='on data', ax=ax[i+1], title=f"{cells} cells")
 
             # Compute distance of neighbors now
-            neighbors = [10, 25, 50, 100, 200, 300, 400, 800, 1200, 1600, 2000] 
+            neighbors = [10, 25, 50, 100,200, 300, 400, 800, 1200, 1600, 2000] 
             distances = {}
             # Upper bound with differnt neighbors
             for i, num in enumerate(neighbors):
@@ -124,17 +147,17 @@ def main():
                 bound = bestVelocityEmbedded(adata_frac, basis, num)
                 distances[f"n_{num}"] = stats.wasserstein_distance(upper_bound, bound)
             # Store distances for each fraction of the dataset
-            results[f"{name}_{frac}"] = distances
+            results[f"{name}_{cells}"] = distances
 
         # After all fraction save results of fractioning for each dataset
         cluster_fractions_df = pd.DataFrame(cluster_fractions)
-        cluster_fractions_df.to_csv(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_cluster_fractions.csv")
+        cluster_fractions_df.to_csv(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_cluster_2000cells_recomputed.csv")
         plt.suptitle(f"{name}")
-        plt.savefig(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_fractions.png")
+        plt.savefig(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_2000cells_recomputed.png")
         plt.close()
 
     df = pd.DataFrame(results)
-    df.to_csv("/mnt/volume/Johanna_Velotest/results/neighbors/k_sizes_test.csv")
+    df.to_csv("/mnt/volume/Johanna_Velotest/results/neighbors/k_sizes_subsample_recomputed_2000cells.csv")
 
 
 if __name__ == "__main__":
