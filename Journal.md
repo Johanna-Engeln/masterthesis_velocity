@@ -1,6 +1,9 @@
 # Project Journal 
 
 This journal are the private notes taken during the development. 
+## Week 28 
+- restart server how to: Ask Marcello to start it and then attach volume with "sudo mount /dev/vdb /mnt/volume/"
+
 ## Week 27
 - Tried to work with the von-Mises distribution as velocity estimate
 
