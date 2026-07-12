@@ -212,7 +212,7 @@ def main():
         #"Retinal_development": "configs/retinal_development.yaml",
         #"Human_HSC": "configs/humanHSC.yaml",
         #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
-        "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
+        #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
         "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
         "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
         "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
