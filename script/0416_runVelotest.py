@@ -1,4 +1,5 @@
 import multiprocessing as mp
+#import statistics
 import yaml
 import scanpy as sc
 import scvelo
@@ -211,16 +212,18 @@ def main():
         #"Covid": "configs/covid.yaml",
         #"Retinal_development": "configs/retinal_development.yaml",
         #"Human_HSC": "configs/humanHSC.yaml",
+        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
         #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
         #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
-        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
-        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
-        "Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
-        "Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
-        "Old_brain": "configs/noEmbedding/old_brain.yaml",
-        "Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
+        #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        #"Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        #"Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
+        #"Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
+        #"Old_brain": "configs/noEmbedding/old_brain.yaml",
+        #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
+        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml",
+        #"Zebra_all": "configs/noEmbedding/zebra_all.yaml"
     }
 
     # Set figure parameters
@@ -244,7 +247,7 @@ def main():
         plot_streamplot(adata, basis, output_path, dataset_name, cluster, cluster_colors, figsize=figsize)
 
         # Run velotest
-        corrected_p_values, h0_rejected, debug_dict = run_hypothesis_test_on(adata,
+        uncorrected_p_values, h0_rejected, debug_dict = run_hypothesis_test_on(adata,
                                                                     number_neighbors_to_sample_from=neighbors,
                                                                     null_distribution="velocities-explicit",
                                                                     cosine_empty_neighborhood=None,
@@ -254,10 +257,14 @@ def main():
                                                                     basis=basis)
 
         statistics = debug_dict['statistics']
-        non_empty_neighborhoods_indices = np.where(corrected_p_values != 2)[0]
+        # This line needed to be added, because some cells still had a statistice but in reaged to the p_value they were empty neighborhoods. 
+        for i, p_val in enumerate(uncorrected_p_values):
+            if p_val == 2:
+                statistics[i] = None
+        non_empty_neighborhoods_indices = np.where(np.array(uncorrected_p_values) != 2)[0].astype(int)
 
         # Plot embedding with significant velocities highlighted
-        plot_significant_velocities(adata, basis, corrected_p_values, h0_rejected, output_path, dataset_name, cluster, cluster_colors, figsize=figsize)
+        plot_significant_velocities(adata, basis, uncorrected_p_values, h0_rejected, output_path, dataset_name, cluster, cluster_colors, figsize=figsize)
         plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name)
 
         # Cumpute and plot test-optimal velocity
