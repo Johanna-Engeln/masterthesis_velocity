@@ -40,7 +40,7 @@ def main():
             "PBMC": "configs/pbmc.yaml",
             #"Retinal_development": "configs/retinal_development.yaml",
             #"Human_HSC": "configs/humanHSC.yaml",
-            #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
+            #"RPE_1": "configs/noEmbedding/intestinal_organoids.yaml",
             #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
             "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
             #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
@@ -48,8 +48,9 @@ def main():
             #"Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
             #"Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
             #"Old_brain": "configs/noEmbedding/old_brain.yaml",
-            #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-            #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
+            #Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
+            #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+            "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
         }
     
     for name, path in datasets.items():
@@ -67,7 +68,7 @@ def main():
         figsize = (4.4 * cm, 3.3 * cm)
 
         ### Neighborhoods
-        number_of_cells = [600, 800, 1200, 1600] # Run this script multiple timeswith different neighbors (100, 200, 300, 400)
+        number_of_cells = [2000, 2500, 3000, 5000] # Run this script multiple timeswith different neighbors (100, 200, 300, 400) sum1, (600, 800, 1200, 1600) sum2, (2000, 2500, 3000, 5000) sum3
         interesting_cells = [0,1,2,8,15,42]
 
         fig, axes = plt.subplots(
@@ -92,7 +93,7 @@ def main():
                 print("Done with", i+j)
 
         plt.savefig(
-            f"results/neighbors/{dataset_name}-neighborhood_summary2.pdf",
+            f"/mnt/volume/Johanna_Velotest/results/neighbors_velotest/{dataset_name}-neighborhood_summary3.pdf",
             transparent=True, dpi=600)
 
 if __name__ == "__main__":
