@@ -73,25 +73,26 @@ def changeTSNE(adata, seed, perplexity=30):
 def main():
     # Load preprocessed dataset
     datasets = {
-        "Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
-        "Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
-        "Dentate_gyrus": "configs/dentategyrus.yaml",
-        "Gastrulation_erythroid": "configs/gastrulation.yaml",
-        "Bone_marrow": "configs/bonemarrow.yaml",
-        "PBMC": "configs/pbmc.yaml",
-        "Covid": "configs/covid.yaml",
-        "Retinal_development": "configs/retinal_development.yaml",
-        "Human_HSC": "configs/humanHSC.yaml",
-        "Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
-        "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
-        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
-        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
-        "Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
-        "Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
-        "Old_brain": "configs/noEmbedding/old_brain.yaml",
-        "Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
+        #"Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
+        #"Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
+        #"Dentate_gyrus": "configs/dentategyrus.yaml",
+        #"Gastrulation_erythroid": "configs/gastrulation.yaml",
+        #"Bone_marrow": "configs/bonemarrow.yaml",
+        #"PBMC": "configs/pbmc.yaml",
+        #"Covid": "configs/covid.yaml",
+        #"Retinal_development": "configs/retinal_development.yaml",
+        #"Human_HSC": "configs/humanHSC.yaml",
+        #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
+        #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
+        #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        #"Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        #"Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
+        #"Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
+        #"Old_brain": "configs/noEmbedding/old_brain.yaml",
+        #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
+        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
     }
 
     results = {}
@@ -112,15 +113,15 @@ def main():
         distances = []
         for seed in range(25):
             print(f"Main script: Start change Embedding for seed {seed}")
-            adata = changeUMAP(adata, seed, neighbors=100)
-            best, non_empty_neighborhoods_indices = bestVelocityEmbedded(adata, basis="umap", number_neighbors=neighbors)
+            adata = changeTSNE(adata, seed, perplexity=50)
+            best, non_empty_neighborhoods_indices = bestVelocityEmbedded(adata, basis="tsne", number_neighbors=neighbors)
             distance = stats.wasserstein_distance(best, upper_optimal_embedding)
             distances.append(distance)
         results[name] = distances
         save = pd.DataFrame(distances)
-        save.to_csv(f"results/umap/{dataset_name}.csv", index=False)
+        #save.to_csv(f"results/umap/{dataset_name}.csv", index=False)
     df = pd.DataFrame(results)
-    df.to_csv("results/distances/0525_Was_all_UMAP_n100.csv", index=False)
+    df.to_csv("results/distances/0525_Was_zebra_NMP_tsne_p50.csv", index=False)
     print("Done! Results saved.")
 
 if __name__ == "__main__":
