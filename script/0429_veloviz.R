@@ -4,32 +4,33 @@ library(reticulate)
 library(yaml)
 library(stringr)
 print("R libraries loaded")
-use_condaenv("veloviz", required = TRUE)
+use_condaenv("/mnt/volume/Johanna_Velotest/enviroments/veloviz", required = TRUE)
 sc <- import("scanpy")
 scvelo <- import("scvelo")
 source_python("/mnt/volume/Johanna_Velotest/script/0429_velo_distance_for_R.py")
 print("Python libraries loaded")
 
 # Load files 
-files <- c("/mnt/volume/Johanna_Velotest/configs/pancreas_dynamic.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/pancreas_stochastic.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/dentategyrus.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/gastrulation.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
-            "/mnt/volume/Johanna_Velotest/configs/bonemarrow.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/pbmc.yaml", # fail Error in if (sum(curr < 0) > 0) { : missing value where TRUE/FALSE needed - FIXED
-            "/mnt/volume/Johanna_Velotest/configs/covid.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/retinal_development.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/humanHSC.yaml", # curr contains negative values, cannot log normalize for PCA - FIXED
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/intestinal_organoids.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/hindbrain.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/oligodendrocyte.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/mouse_bonemarrow.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/human_cerebral.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/mouse_hema.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/spermatogenesis.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/old_brain.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/pfc.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/GSE128365.yaml" # Same Error like humanHSC
+files <- c(#"/mnt/volume/Johanna_Velotest/configs/pancreas_dynamic.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/pancreas_stochastic.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/dentategyrus.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/gastrulation.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
+            #"/mnt/volume/Johanna_Velotest/configs/bonemarrow.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/pbmc.yaml", # fail Error in if (sum(curr < 0) > 0) { : missing value where TRUE/FALSE needed - FIXED
+            #"/mnt/volume/Johanna_Velotest/configs/covid.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/retinal_development.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/humanHSC.yaml", # curr contains negative values, cannot log normalize for PCA - FIXED
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/intestinal_organoids.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/hindbrain.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/oligodendrocyte.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/mouse_bonemarrow.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/human_cerebral.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/mouse_hema.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/spermatogenesis.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/old_brain.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/pfc.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/noEmbedding/GSE128365.yaml" # Same Error like humanHSC
+            "/mnt/volume/Johanna_Velotest/configs/noEmbedding/zebra_NMP.yaml"
             )
 
 # Initiate list to store stuff
@@ -99,7 +100,7 @@ for (path in files){
       nPCs = 20,
       center = TRUE,
       scale = TRUE,
-      k = 30, # samle as UMAP default values here
+      k = 30, # sample as UMAP default values here
       similarity.threshold = 0, # the following 3 paramters are chosen based on Veloviz recommondation for a rodust graph for unknown data
       distance.weight = 1,
       distance.threshold = 1,
@@ -134,4 +135,4 @@ for (path in files){
 }
 
 df <- as.data.frame(preDF)
-write.csv(df, "/mnt/volume/Johanna_Velotest/results/distances/0519_Was_all_Veloviz.csv", quote = FALSE, row.names = FALSE)
+write.csv(df, "/mnt/volume/Johanna_Velotest/results/distances/0519_Was_zebra_Veloviz.csv", quote = FALSE, row.names = FALSE)

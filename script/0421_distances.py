@@ -55,7 +55,7 @@ def bestVelocityEmbedded(adata, basis, number_neighbors):
 
     return best_value, non_empty_neighborhoods_indices
 
-def changeUMAP(adata, seed, neighbors=15):
+def changeUMAP(adata, seed, neighbors=30):
     del adata.obsm['X_umap'], adata.obsm['velocity_umap'], adata.obsp['connectivities'], adata.obsp['distances']
     sc.pp.neighbors(adata, n_neighbors=neighbors, random_state=seed)  # recompute graph
     sc.tl.umap(adata, init_pos='random', random_state=seed)
