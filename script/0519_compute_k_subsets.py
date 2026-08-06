@@ -69,21 +69,22 @@ def bestVelocityEmbedded(adata, basis, num=200):
 def main():
     # Load preprocessed dataset
     datasets = {
-        "Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
-        "Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
-        "Dentate_gyrus": "configs/dentategyrus.yaml",
-        "Gastrulation_erythroid": "configs/gastrulation.yaml",
-        "Bone_marrow": "configs/bonemarrow.yaml",
-        "PBMC": "configs/pbmc.yaml",
-        "Covid": "configs/covid.yaml",
-        "Retinal_development": "configs/retinal_development.yaml",
-        "Human_HSC": "configs/humanHSC.yaml",
-        "Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
-        "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
-        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
-        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
-        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
+        #"Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
+        #"Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
+        #"Dentate_gyrus": "configs/dentategyrus.yaml",
+        #"Gastrulation_erythroid": "configs/gastrulation.yaml",
+        #"Bone_marrow": "configs/bonemarrow.yaml",
+        #"PBMC": "configs/pbmc.yaml",
+        #"Covid": "configs/covid.yaml",
+        #"Retinal_development": "configs/retinal_development.yaml",
+        #"Human_HSC": "configs/humanHSC.yaml",
+        #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
+        #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
+        #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        #"Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
     }
 
     # Initialte object to store results
@@ -101,18 +102,18 @@ def main():
         cluster = config['cluster']
         model = config['model']
         #fractions = [0.5, 0.25, 0.125]
-        cells = [2000]
+        cells = [5000]
 
         # Collect cluster fraction results and embeddings for each dataset
         cluster_fractions = {}
         cluster_fractions[f"{name}_original"] = adata.obs[cluster].value_counts()/adata.n_obs
 
-        fig, ax = plt.subplots(1, 4, figsize=(20, 5), constrained_layout=True)
+        fig, ax = plt.subplots(1, 2, figsize=(20, 5), constrained_layout=True)
         scvelo.pl.scatter(adata, basis=basis, color=cluster, legend_loc='on data', ax=ax[0], title="original")
 
         for i, frac in enumerate(cells): # Here change fraction and cells in this loop
             # Sample from dataset and collect cluster fraction information
-            adata_frac = sc.pp.sample(adata, n=cells, axis='obs', copy=True) # here otherwise fraction=frac
+            adata_frac = sc.pp.sample(adata, n=cells, axis='obs', copy=True) # here otherwise fraction=frac or n=cells
             cluster_fractions[f"{name}_{cells}"] = adata_frac.obs[cluster].value_counts()/adata_frac.n_obs
 
             scvelo.pp.filter_and_normalize(adata_frac, n_top_genes=2000)
@@ -131,7 +132,7 @@ def main():
                 scvelo.tl.velocity_graph(adata) 
                 scvelo.tl.velocity_embedding(adata, basis='tsne')
             # Plot embedding for sampled dataset
-            scvelo.pl.scatter(adata_frac, basis=basis, color=cluster, legend_loc='on data', ax=ax[i+1], title=f"{cells} cells")
+            scvelo.pl.scatter(adata_frac, basis=basis, color=cluster, legend_loc='on data', ax=ax[i+1], title=f"{cells} cells") #eithe: 1/{1/frac} fraction or: {cells} cells
 
             # Compute distance of neighbors now
             neighbors = [10, 25, 50, 100,200, 300, 400, 800, 1200, 1600, 2000] 
@@ -151,13 +152,13 @@ def main():
 
         # After all fraction save results of fractioning for each dataset
         cluster_fractions_df = pd.DataFrame(cluster_fractions)
-        cluster_fractions_df.to_csv(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_cluster_2000cells_recomputed.csv")
+        cluster_fractions_df.to_csv(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_cluster_5000cells_recomputed.csv")
         plt.suptitle(f"{name}")
-        plt.savefig(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_2000cells_recomputed.png")
+        plt.savefig(f"/mnt/volume/Johanna_Velotest/results/neighbors/{name}_5000cells_recomputed.pdf", transparent=True, dpi=450)
         plt.close()
 
     df = pd.DataFrame(results)
-    df.to_csv("/mnt/volume/Johanna_Velotest/results/neighbors/k_sizes_subsample_recomputed_2000cells.csv")
+    df.to_csv("/mnt/volume/Johanna_Velotest/results/neighbors/k_sizes_subsample_recomputed_5000cells_zebra.csv")
 
 
 if __name__ == "__main__":

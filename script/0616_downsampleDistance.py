@@ -1,22 +1,15 @@
 import multiprocessing as mp
-import yaml
 
-import scvelo
 import numpy as np
 import pandas as pd
-import torch
 import scanpy as sc
+import scvelo
+import torch
+import yaml
 from scipy import stats
-from sklearn.metrics import mean_squared_error
-
-from matplotlib import pyplot as plt
-import matplotlib as mpl
-import seaborn as sns
 from tqdm import tqdm
-
-import velotest
 from velotest.hypothesis_testing import run_hypothesis_test_on
-from velotest.neighbors import find_neighbors_in_direction_of_velocity, find_neighbors
+from velotest.neighbors import find_neighbors, find_neighbors_in_direction_of_velocity
 
 
 def calculateBound(adata, k=None, neighbors=True, num_neighbors=200): 
@@ -52,14 +45,6 @@ def bestVelocityEmbedded(adata, basis, number_neighbors):
 
     return best_value, non_empty_neighborhoods_indices
 
-def changeUMAP(adata, seed, neighbors=15):
-    del adata.obsm['X_umap'], adata.obsm['velocity_umap'], adata.obsp['connectivities'], adata.obsp['distances']
-    sc.pp.neighbors(adata, n_neighbors=neighbors, random_state=seed)  # recompute graph
-    sc.tl.umap(adata, init_pos='random', random_state=seed)
-    scvelo.pl.velocity_embedding(adata)
-
-    return adata
-
 def changeTSNE(adata, seed, perplexity=30):
     if 'X_tsne' in adata.obsm:
         del adata.obsm['X_tsne'], adata.obsm['velocity_tsne'], adata.obsp['connectivities'], adata.obsp['distances']
@@ -77,11 +62,11 @@ def main():
         #"Dentate_gyrus": "configs/dentategyrus.yaml",
         #"Gastrulation_erythroid": "configs/gastrulation.yaml",
         #"Bone_marrow": "configs/bonemarrow.yaml",
-        "PBMC": "configs/pbmc.yaml",
+        #"PBMC": "configs/pbmc.yaml",
         #"Covid": "configs/covid.yaml",
         #"Retinal_development": "configs/retinal_development.yaml",
         #"Human_HSC": "configs/humanHSC.yaml",
-        #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
+        #"RPE_1": "configs/noEmbedding/intestinal_organoids.yaml",
         #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
         #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
         #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
@@ -90,7 +75,8 @@ def main():
         #"Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
         #"Old_brain": "configs/noEmbedding/old_brain.yaml",
         #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml"
+        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+        "Zebra_NMP": "/mnt/volume/Johanna_Velotest/configs/noEmbedding/zebra_NMP.yaml"
     }
 
     results = {}
@@ -144,9 +130,9 @@ def main():
         else:
             results[name] = distances
             save = pd.DataFrame(distances)
-            save.to_csv(f"results/tsne/{dataset_name}.csv", index=False)
+            save.to_csv(f"results/distances/tsne/{dataset_name}.csv", index=False)
     df = pd.DataFrame(results)
-    df.to_csv("results/distances/0616_Was_all_subsampled_2000cellsPBMC.csv", index=False)
+    df.to_csv("results/distances/0616_Was_all_subsampled_2000cellsZebra.csv", index=False)
     print("Done! Results saved.")
 
 if __name__ == "__main__":
