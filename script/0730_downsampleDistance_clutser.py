@@ -144,44 +144,44 @@ def main():
         print(f"Selected high index: {middle_idx} | Cluster name: {high_cluster} | Size: {high_cluster_size}")
 
         # Subsample cluster
-        adata_frac = adata[adata.obs[cluster] == high_cluster].copy()  # Swap this line to check a different cluster
+        adata_frac = adata[adata.obs[cluster] == middle_cluster].copy()  # Swap this line to check a different cluster
         if name == "Human_HSC":
             adata_frac.X = adata_frac.layers['matrix']
         scvelo.pp.filter_and_normalize(adata_frac, n_top_genes=2000)
         sc.tl.pca(adata_frac)
         sc.pp.neighbors(adata_frac, n_pcs=30, n_neighbors=30) 
-        scvelo.pp.moments(adata_frac)
-        if model == 'dynamical':
-            scvelo.tl.recover_dynamics(adata_frac, n_jobs=7)
-        scvelo.tl.velocity(adata_frac, mode=model)
+        #scvelo.pp.moments(adata_frac)
+        #if model == 'dynamical':
+        #    scvelo.tl.recover_dynamics(adata_frac, n_jobs=7)
+        #scvelo.tl.velocity(adata_frac, mode=model)
 
         neighbors = int(high_cluster_size * 0.05)
-        upper_optimal_embedding = calculateBound(adata_frac, neighbors=True, num_neighbors=neighbors)
+        #upper_optimal_embedding = calculateBound(adata_frac, neighbors=True, num_neighbors=neighbors)
         
         distances = []
-        for seed in range(25):
+        for seed in range(1):
             print(f"Main script: {seed}")
 
             # Recalculate embedding and distance
             adata_frac = changeTSNE(adata_frac, seed)
-            plot_streamplot(adata_frac, 'tsne', '/mnt/volume/Johanna_Velotest/results/distances/cluster_subsample', f'{dataset_name}_{seed}', cluster)
+            plot_streamplot(adata_frac, 'tsne', '/mnt/volume/Johanna_Velotest/results/distances/cluster_subsample', f'{dataset_name}_{seed}_middle_cluster', cluster)
            
-            best, non_empty_neighborhoods_indices = bestVelocityEmbedded(adata_frac, basis="tsne", number_neighbors=neighbors)
-            distance = stats.wasserstein_distance(best, upper_optimal_embedding)
-            distances.append(distance)
+            #best, non_empty_neighborhoods_indices = bestVelocityEmbedded(adata_frac, basis="tsne", number_neighbors=neighbors)
+            #distance = stats.wasserstein_distance(best, upper_optimal_embedding)
+            #distances.append(distance)
 
-        number_velocity_genes = adata_frac.var['velocity_genes'].sum()
-        data = {
-            'dataset_name': dataset_name,
-            'cluster_name': high_cluster,
-            'cluster_size': high_cluster_size,
-            'velocity_genes': number_velocity_genes,
-            'distances': distances if distances else [np.nan]
-        }
-        results.append(data)
+        #number_velocity_genes = adata_frac.var['velocity_genes'].sum()
+        #data = {
+        #    'dataset_name': dataset_name,
+        #    'cluster_name': high_cluster,
+        #    'cluster_size': high_cluster_size,
+        #    'velocity_genes': number_velocity_genes,
+        #    'distances': distances if distances else [np.nan]
+        #}
+        #results.append(data)
 
-        df = pd.DataFrame(results)
-        df.to_csv('/mnt/volume/Johanna_Velotest/results/distances/cluster_subsample/Wasserstein_tSNE_high_cluster.csv', index=False)
+       # df = pd.DataFrame(results)
+        #df.to_csv('/mnt/volume/Johanna_Velotest/results/distances/cluster_subsample/Wasserstein_tSNE_high_cluster.csv', index=False)
     print("Done! Results saved.")
 
 if __name__ == "__main__":
