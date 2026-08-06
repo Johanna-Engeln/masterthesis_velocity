@@ -11,11 +11,11 @@ source_python("/mnt/volume/Johanna_Velotest/script/0802_velo_qc_help.py")
 print("Python libraries loaded")
 
 # Load files 
-files <- c("/mnt/volume/Johanna_Velotest/configs/pancreas_dynamic.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/pancreas_stochastic.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/dentategyrus.yaml",
-            "/mnt/volume/Johanna_Velotest/configs/gastrulation.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
-            "/mnt/volume/Johanna_Velotest/configs/bonemarrow.yaml",
+files <- c(#"/mnt/volume/Johanna_Velotest/configs/pancreas_dynamic.yaml",
+           # "/mnt/volume/Johanna_Velotest/configs/pancreas_stochastic.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/dentategyrus.yaml",
+            #"/mnt/volume/Johanna_Velotest/configs/gastrulation.yaml", # fail because of k - FIXED with the TRUE/FALSE swap
+            #"/mnt/volume/Johanna_Velotest/configs/bonemarrow.yaml",
             "/mnt/volume/Johanna_Velotest/configs/pbmc.yaml", # fail Error in if (sum(curr < 0) > 0) { : missing value where TRUE/FALSE needed - FIXED
             "/mnt/volume/Johanna_Velotest/configs/covid.yaml",
             "/mnt/volume/Johanna_Velotest/configs/retinal_development.yaml",
@@ -88,7 +88,7 @@ for (path in files){
 
   results = c()
 
-  for (seed in 1:1){
+  for (seed in 1:25){
     print(paste("Seed:", seed, " Set:", data_name))
     # build veloviz
     set.seed(seed)
@@ -152,6 +152,8 @@ for (path in files){
     row_index <- row_index + 1
 
   }
+  df <- do.call(rbind, all_results)
+  write.csv(df, "/mnt/volume/Johanna_Velotest/results/embbeding_qc/0803_embedding_veloviz.csv", quote = FALSE, row.names = FALSE)
 }
 df <- do.call(rbind, all_results)
-write.csv(df, "/mnt/volume/Johanna_Velotest/results/distances/0803_embedding_veloviz.csv", quote = FALSE, row.names = FALSE)
+write.csv(df, "/mnt/volume/Johanna_Velotest/results/embbedding_qc/0803_embedding_veloviz.csv", quote = FALSE, row.names = FALSE)

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scanpy as sc
+import scvelo
 import seaborn as sns
 import yaml
 from scipy.sparse import issparse
@@ -146,42 +147,44 @@ def main():
         labels = adata.obs[cluster]
         print("Data loaded: ", name)
 
-        for seed in range(25):
+        for seed in range(1):
             print(f"Start {name} with seed {seed}")
-            adata = changeUMAP(adata=adata, seed=seed)
-            adata = changeTSNE(adata=adata, seed=seed)
-            umap = adata.obsm["X_umap"]
-            tsne = adata.obsm['X_tsne']
+            #adata = changeUMAP(adata=adata, seed=seed)
+            #adata = changeTSNE(adata=adata, seed=seed)
+            scvelo.tl.velocity_embedding(adata, basis='pca')
+            pca = adata.obsm['X_pca'][:, :2]
+            #umap = adata.obsm["X_umap"]
+            #tsne = adata.obsm['X_tsne']
 
             if name == 'Human_HSC':
                 high_dim_data = adata.layers['matrix']
             else: 
                 high_dim_data = adata.X
 
-            results.append({
-                'dataset': name,
-                'seed': seed,
-                'embedding': 'umap',
-                'trustworthiness': trustworthiness(high_dim_data, umap, n_neighbors=10),
-                'continuity': trustworthiness(umap, high_dim_data, n_neighbors=10),
-                'knn': calculate_knn(high_dim_data, umap),
-                'cpd': calculate_spearman(high_dim_data, umap),
-                'knc': calculate_knc(high_dim_data, umap, labels)
-            })
+            #results.append({
+            #    'dataset': name,
+            #    'seed': seed,
+            #    'embedding': 'umap',
+            #    'trustworthiness': trustworthiness(high_dim_data, umap, n_neighbors=10),
+            #    'continuity': trustworthiness(umap, high_dim_data, n_neighbors=10),
+            #    'knn': calculate_knn(high_dim_data, umap),
+            #    'cpd': calculate_spearman(high_dim_data, umap),
+            #    'knc': calculate_knc(high_dim_data, umap, labels)
+            #})
 
             results.append({
                 'dataset': name,
                 'seed': seed,
-                'embedding': 'tsne',
-                'trustworthiness': trustworthiness(high_dim_data, tsne, n_neighbors=10),
-                'continuity': trustworthiness(tsne, high_dim_data, n_neighbors=10),
-                'knn': calculate_knn(high_dim_data, tsne),
-                'cpd': calculate_spearman(high_dim_data, tsne),
-                'knc': calculate_knc(high_dim_data, tsne, labels)
+                'embedding': 'pca',
+                'trustworthiness': trustworthiness(high_dim_data, pca, n_neighbors=10),
+                'continuity': trustworthiness(pca, high_dim_data, n_neighbors=10),
+                'knn': calculate_knn(high_dim_data, pca),
+                'cpd': calculate_spearman(high_dim_data, pca),
+                'knc': calculate_knc(high_dim_data, pca, labels)
             })
 
         df = pd.DataFrame(results)
-        df.to_csv("/mnt/volume/Johanna_Velotest/results/embbeding_qc/0729_qc.csv")
+        df.to_csv("/mnt/volume/Johanna_Velotest/results/embbeding_qc/0803_qc_pca.csv")
 
 if __name__ == "__main__":
     main()
