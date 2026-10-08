@@ -1,21 +1,52 @@
 # Project Journal 
 
-Which script does which task: 
+In this document and explanation of the used code is provided. 
 
-## Data preprocessing
-script/0331_dataPreparation.ipynb
-script/0414_dataPreparation.ipynb
+## Code used for the master's thesis
 
-## Run velotest - Generated results of Chapter 4.1
+*Data preprocessing:*  
+To save computational time the velocity computation and embeddings were saved once.
+- script/0331_dataPreparation.ipynb
+- script/0414_dataPreparation.ipynb
+
+The differnt bounds were save to its respective data as well
+- script/0511_addData.ipynb
+
+*Run velotest:* 
+This code generated results of Chapter 4.1
 Here only one script was used and adpated to the specific test (dataset and embedding method)
-script/0414_runVelotest
+- script/0414_runVelotest
 
-## Compute Wasserstein distance between the velocity and the neighborhood-based upper bound
-## - Generated results of Chapter 4.2
+*Compute Wasserstein distance between the velocity and the neighborhood-based upper bound:*
+This code generated results of Chapter 4.1
+The scirpts were adapted to fullfil the different computational tasks of testing different embedding methods with different hyperparameter settings. 
+
+For the test-optimal velocity: 
+- script/0421_distances.py
+- script/0728_pca.py
+
+For the visualized velocity: 
+- script/0831_distance_Velocity_direction.py
+
+For VeloViz - the code was adated one for the test-optimal velocity and then change to the visualized velocity:
+- script/0429_veloviz.R
+- script/0429_velo_distance_for_R.py
+
+For primalry visualization:
+- script/0529_plotsEmbeddingDistance.ipynb
+
+*Investigate the hyperparameter k (neighborhood size):*
+This code generated the results of Chapter 4.3.2
+
+To investigate the problem, first the bound was test with differen settings of *k*
+- script/0421_BoundNeighborSize.ipynb
+
+
+## Code not used in the master's thesis
 
 
 
-Personal notes:
+## Personal notes:
 Command to use to attach volume to server again: "sudo mount /dev/vdb /mnt/volume/"
 
 ## Week 27
