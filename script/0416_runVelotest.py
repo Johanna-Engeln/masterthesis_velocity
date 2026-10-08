@@ -1,5 +1,5 @@
 import multiprocessing as mp
-#import statistics
+
 import yaml
 import scanpy as sc
 import scvelo
@@ -203,27 +203,26 @@ def plot_histogram_best_possible_velocities(best_possible_velocities_statistic, 
 # Run main part of the script
 def main():
     datasets = {
-        #"Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
-        #"Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
-        #"Dentate_gyrus": "configs/dentategyrus.yaml",
-        #"Gastrulation_erythroid": "configs/gastrulation.yaml",
-        #"Bone_marrow": "configs/bonemarrow.yaml",
-        #"PBMC": "configs/pbmc.yaml",
-        #"Covid": "configs/covid.yaml",
-        #"Retinal_development": "configs/retinal_development.yaml",
-        #"Human_HSC": "configs/humanHSC.yaml",
-        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
-        #"Intestinal_development": "configs/noEmbedding/intestinal_organoids.yaml",
-        #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
-        #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
-        #"Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
-        #"Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
-        #"Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
-        #"Old_brain": "configs/noEmbedding/old_brain.yaml",
-        #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml",
-        #"Zebra_all": "configs/noEmbedding/zebra_all.yaml"
+        "Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
+        "Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
+        "Dentate_gyrus": "configs/dentategyrus.yaml",
+        "Gastrulation_erythroid": "configs/gastrulation.yaml",
+        "Bone_marrow": "configs/bonemarrow.yaml",
+        "PBMC": "configs/pbmc.yaml",
+        "Covid": "configs/covid.yaml",
+        "Retinal_development": "configs/retinal_development.yaml",
+        "Human_HSC": "configs/humanHSC.yaml",
+        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+        "RPE_1": "configs/noEmbedding/intestinal_organoids.yaml",
+        "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
+        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        "Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
+        "Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
+        "Old_brain": "configs/noEmbedding/old_brain.yaml",
+        "Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
+        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
     }
 
     # Set figure parameters
@@ -238,7 +237,13 @@ def main():
 
         adata = sc.read(config['path'])
         dataset_name = config['dataset_name']
-        basis = config['basis']
+        ori_basis = config['basis']
+        if ori_basis == 'umap': # Adapted later to get velotest results for different embeddings
+            continue
+        sc.pp.neighbors(adata, n_neighbors=30) 
+        sc.tl.umap(adata)
+        scvelo.pl.velocity_embedding(adata, basis='umap')
+        basis = 'umap'  # config['basis']
         neighbors = config['number_neighbors_to_sample_from']   
         cluster = config['cluster']
         cluster_colors = config['cluster_colors']
