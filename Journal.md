@@ -1,8 +1,22 @@
 # Project Journal 
 
-This journal are the private notes taken during the development. 
-## Week 28 
-- restart server how to: Ask Marcello to start it and then attach volume with "sudo mount /dev/vdb /mnt/volume/"
+Which script does which task: 
+
+## Data preprocessing
+script/0331_dataPreparation.ipynb
+script/0414_dataPreparation.ipynb
+
+## Run velotest - Generated results of Chapter 4.1
+Here only one script was used and adpated to the specific test (dataset and embedding method)
+script/0414_runVelotest
+
+## Compute Wasserstein distance between the velocity and the neighborhood-based upper bound
+## - Generated results of Chapter 4.2
+
+
+
+Personal notes:
+Command to use to attach volume to server again: "sudo mount /dev/vdb /mnt/volume/"
 
 ## Week 27
 - Tried to work with the von-Mises distribution as velocity estimate
