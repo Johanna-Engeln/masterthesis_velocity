@@ -38,10 +38,11 @@ def bestVelocityEmbedded(adata, basis, number_neighbors):
     statistics = debug_dict['statistics']
 
     # Calculate emmbeding test optimal statistic
-    best_value = [statistics.get_max_value(offset=True)[1] for statistics in statistics if statistics is not None]
+    #best_value = [statistics.get_max_value(offset=True)[1] for statistics in statistics if statistics is not None]
     non_empty_neighborhoods_indices = np.where(uncorrected_p_values != 2)[0]
+    original_value = [statistics.get_values()[0] for statistics in statistics if statistics is not None] #this was change for visualized or test-optimal velocity
 
-    return best_value, non_empty_neighborhoods_indices
+    return original_value, non_empty_neighborhoods_indices
 
 #### MAIN function to calculate distance
 def distance_calculation(adata, upper, neighbors):

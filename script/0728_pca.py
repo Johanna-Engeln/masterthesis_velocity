@@ -47,13 +47,13 @@ def main():
         neighbors = config['number_neighbors_to_sample_from']
         uncorrected_p_values, h0_rejected, debug_dict = run_hypothesis_test_on(adata, basis='pca', number_neighbors_to_sample_from=neighbors, null_distribution="velocities-explicit", cosine_empty_neighborhood=None, correction="bonferroni", restrict_to_velocity_genes=True, exclusion_degree=10)
         statistics = debug_dict['statistics']
-        best_value = [statistics.get_max_value(offset=True)[1] for statistics in statistics if statistics is not None]
+        original_value = [statistics.get_values()[0] for statistics in statistics if statistics is not None]
         upper = adata.obsm['upper_max_neighbors']
-        pca[name] = stats.wasserstein_distance(best_value, upper)
+        pca[name] = stats.wasserstein_distance(original_value, upper)
 
     df = pd.DataFrame([pca])
     print("Here")
-    df.to_csv("results/distances/0727_Was_all_pca.csv", index=False)
+    df.to_csv("results/distances/0908_Was_all_ori_pca.csv", index=False)
     print("Done")
 
 
