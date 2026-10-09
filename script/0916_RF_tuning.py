@@ -20,17 +20,12 @@ from scipy.spatial import distance
 from sklearn import ensemble, linear_model, preprocessing
 from sklearn.inspection import permutation_importance
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.model_selection import StratifiedKFold, cross_val_score, cross_validate, RandomizedSearchCV
+from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, cross_val_score, cross_validate
 from sklearn.pipeline import Pipeline, make_pipeline
 from tqdm import tqdm
 from velotest.hypothesis_testing import run_hypothesis_test_on
 from velotest.neighbors import find_neighbors, find_neighbors_in_direction_of_velocity
-from velotest.plotting import (
-    arrow_plot,
-    compute_angle_on_gridplot_between,
-    plot_best_possible_velocities_statistic,
-    plot_uniformity_histogram,
-)
+
 
 
 def add_non_nan_features(matrix, names, final_matrix, final_features):
