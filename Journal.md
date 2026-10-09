@@ -17,8 +17,11 @@ This code generated results of Chapter 4.1
 Here only one script was used and adpated to the specific test (dataset and embedding method)
 - script/0414_runVelotest
 
+*Summary of the bound investigation:*
+- script/0712_summary_bounds.ipynb
+
 *Compute Wasserstein distance between the velocity and the neighborhood-based upper bound:*
-This code generated results of Chapter 4.1
+This code generated results of Chapter 4.2
 The scirpts were adapted to fullfil the different computational tasks of testing different embedding methods with different hyperparameter settings. 
 
 For the test-optimal velocity: 
@@ -32,64 +35,56 @@ For VeloViz - the code was adated one for the test-optimal velocity and then cha
 - script/0429_veloviz.R
 - script/0429_velo_distance_for_R.py
 
-For primalry visualization:
+For the subsampling (Chapter 4.3.3):
+- script/0616_downsampleDistance.py
+
+For primalry visualization of the results:
 - script/0529_plotsEmbeddingDistance.ipynb
+
+*Compute structure preservation metric for embedding methods:*
+
+This code generated results presented in Chapter 4.2
+- script/0728_embbedding_qc.ipynb
+- script/0729_embedding_qc.py
+- script/0802_velo_qc_help.py
+- script/0802_veloviz_qc.R
 
 *Investigate the hyperparameter k (neighborhood size):*
 This code generated the results of Chapter 4.3.2
 
-To investigate the problem, first the bound was test with differen settings of *k*
+To investigate the problem, first the bound was test with different settings of *k*
 - script/0421_BoundNeighborSize.ipynb
+
+This is the main notebook with visualizations
+- script/0427_differentK_influence.ipynb
+
+*Feature discovery with RF:*
+This code was used to generate the results of Chapter 4.3.1
+- script/0911_final_classification.ipynb
+- script/0916_RF_tuning.py
+
+*Use the cosine similarity distribution:*
+This code was used to generate the results presented in Chapter 4.3.3 and to find a good way to present Chapter 3.8
+
+Note that in those notebooks also plots and computations that were not presented in the thesis are included
+- script/0617_proof.ipynb
+- script/0707_incompleteBeta.ipynb
 
 
 ## Code not used in the master's thesis
 
+Further in this repository there are scripts stored, that weren't used in the final thesis. 
+
+We tried to figure out the first, second, third, and fourth order moment. 
+- script/0423_sig_dis_form.py
+
+We tried to figure out if there is a correlation between the significance value from velotest and the Wasserstein distance that was calculated. 
+
+- script/0423_sig_vs_distances.ipynb
+
+Further different approaches in the case of subsampling were used 
+- script/0519_compute_k_subsets.py
 
 
-## Personal notes:
+## Persona
 Command to use to attach volume to server again: "sudo mount /dev/vdb /mnt/volume/"
-
-## Week 27
-- Tried to work with the von-Mises distribution as velocity estimate
-
-## Week 26
-- Worked on the mathematical proof to understand some mathematical connections
-- Repeated to run subsampling to 2000 cells and than compute W-Dis of the different datasets
-- Recreate the theoretical sampling with a real dataset. 
-
-## Week 25
-- Started to examine the hypothesis that "More cells in a dataset = higher W-Dis"
-- Started to run subsampling to 2000 cells and than compute W-Dis of the different datasets (had a coding error...)
-
-## Week 24 (break)
-- Gave Manfred the Update
-
-## Week 23
-- Explored dyngen and tried to get influences of experimental time and sampling recreated to examine it as one determinate that influences the embedding
-- Finished bigger update for Manfred and Sebastian
-
-## Week 22
-- Finalize some small task that were pilling up as leftovers
-- Start writing thesis k part
-- Prepared summary for Seabstian, k part, embedding part, Entropy and consitency score, model comparison, sythetic data
-
-## Week 21
-- Use subsamplig for k neighbors to 'proof' trend
-- Play around with entropy and consistency score
-- Download and try synthetic datasets
-
-## Week 20
-- Meeting mit Manfred und Sebastian
-- Save bounds in anndata object
-- Tried to find formular explaniation for the linearity between self-transition and upper bound (check code an paper)
-- Finally started veloviz run
-- finished k computations
-
-## Week 19
-- Create the github repository and start proper documentation
-- 5 of 19 datasets had problems running veloviz script, try to fix those
-- Run Linear regression with self transition - results are super confusing, asked Sebastian
-
-## What was done sofar: 
-- Figured out the neighbor parameter k of velotest 
-- Split work in three parts (embedding, within datasets, between datasets)
