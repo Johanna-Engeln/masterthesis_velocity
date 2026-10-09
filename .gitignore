@@ -12,6 +12,7 @@
 !*.R
 !*.yaml
 !*.md
+!*.sh
 
 # Do not push the data and anndata objects
 data/
