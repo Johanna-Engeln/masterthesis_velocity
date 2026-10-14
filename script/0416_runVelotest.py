@@ -69,24 +69,22 @@ def plot_significant_velocities(adata, basis, corrected_p_values, h0_rejected, o
             plot_legend=False,
             ax=ax)
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-    plt.text(0.975, 0.025, f'{np.sum(h0_rejected) / len(adata) * 100:.1f}%', transform=fig.transFigure, fontsize=5, ha="right")
+    plt.text(0.975, 0.025, f'{np.sum(h0_rejected) / len(adata) * 100:.1f}%', transform=fig.transFigure, fontsize=7, ha="right")
 
     # Save plot
     plt.savefig(f"{output_path}/{dataset_name}_{basis}_significant_velocities.pdf",
         transparent=True, dpi=450)
     pass
 
-def plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name):
+def plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name, figsize):
     # Calculate significant velocities
     h0_rejected_0, uncorrected_p_values_0 = determine_significant_vectors(None, non_empty_neighborhoods_indices, statistics)
     # Start plot frame 
-    cm = 1 / 2.54 
-    figsize=(3.2* cm, 1.8 * cm)
     fig, ax = plt.subplots(dpi=450, constrained_layout=True, figsize=figsize)  
 
     ax.xaxis.set_major_locator(plt.MaxNLocator(2))
-    ax.set_xticks([0, 1], labels=[0, 1], fontsize=4)
-    ax.tick_params(axis='both', width=0.5, labelsize=4)
+    ax.set_xticks([0, 1], labels=[0, 1], fontsize=6)
+    ax.tick_params(axis='both', width=0.5, labelsize=6)
 
     plot_uniformity_histogram(uncorrected_p_values_0[uncorrected_p_values_0 < 2], ax=ax)
     #assert plt.ylim()[1] <= 5.43
@@ -94,9 +92,10 @@ def plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_i
     ax.spines["bottom"].set_linewidth(0.5)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    plt.ylim(top=5.5)
-    plt.xlabel("p-value", fontsize=4, labelpad=0.5)
-    plt.ylabel("Density", fontsize=4)
+    ax.set_ylim(top=5.5)
+    ax.set_yticks([0, 5], labels=[0, 5], fontsize=6)
+    plt.xlabel("p-value", fontsize=7, labelpad=0.5)
+    plt.ylabel("Density", fontsize=7)
     plt.savefig(f"{output_path}/{dataset_name}_{basis}_histogramm_p_values.pdf",
         transparent=True, dpi=450)
     pass
@@ -148,7 +147,7 @@ def plot_test_optimal_velocity(adata_plotting, basis, color_dict_plotting, color
                                         arrow_color=colors, edgecolors=None,
                                         rasterized=True, figsize=figsize, 
                                         color=color, 
-                                        #palette=color_dict_plotting
+                                        palette=color_dict_plotting
                                         )
     ax.set_aspect('equal')
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
@@ -203,31 +202,32 @@ def plot_histogram_best_possible_velocities(best_possible_velocities_statistic, 
 # Run main part of the script
 def main():
     datasets = {
-        "Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
-        "Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
-        "Dentate_gyrus": "configs/dentategyrus.yaml",
-        "Gastrulation_erythroid": "configs/gastrulation.yaml",
-        "Bone_marrow": "configs/bonemarrow.yaml",
-        "PBMC": "configs/pbmc.yaml",
-        "Covid": "configs/covid.yaml",
-        "Retinal_development": "configs/retinal_development.yaml",
-        "Human_HSC": "configs/humanHSC.yaml",
-        "Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
-        "RPE_1": "configs/noEmbedding/intestinal_organoids.yaml",
-        "Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
-        "Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
-        "Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
-        "Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
-        "Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
+        #"Pancreas_dynamical": "configs/pancreas_dynamic.yaml",
+        #"Pancreas_stochastic": "configs/pancreas_stochastic.yaml",
+        #"Dentate_gyrus": "configs/dentategyrus.yaml",
+        #"Gastrulation_erythroid": "configs/gastrulation.yaml",
+        #"Bone_marrow": "configs/bonemarrow.yaml",
+        #"PBMC": "configs/pbmc.yaml",
+        #"Covid": "configs/covid.yaml",
+        #"Retinal_development": "configs/retinal_development.yaml",
+        #"Human_HSC": "configs/humanHSC.yaml",
+        #"Intestinal_organoids":"configs/noEmbedding/GSE128365.yaml",
+        #"RPE_1": "configs/noEmbedding/intestinal_organoids.yaml",
+        #"Hindbrain_mouse": "configs/noEmbedding/hindbrain.yaml",
+        #"Oligodendrocyte_mouse": "configs/noEmbedding/oligodendrocyte.yaml",
+        #"Bone_marrow_mouse": "configs/noEmbedding/mouse_bonemarrow.yaml",
+        #"Cerebral_cortex_human": "configs/noEmbedding/human_cerebral.yaml",
+        #"Hematopoiesis_mouse": "configs/noEmbedding/mouse_hema.yaml",
         "Spermatogenisis": "configs/noEmbedding/spermatogenesis.yaml",
-        "Old_brain": "configs/noEmbedding/old_brain.yaml",
-        "Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
-        "Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
+        #"Old_brain": "configs/noEmbedding/old_brain.yaml",
+        #"Prefrontal_cortex": "configs/noEmbedding/pfc.yaml",
+        #"Zebra_NMP": "configs/noEmbedding/zebra_NMP.yaml"
     }
 
     # Set figure parameters
     cm = 1 / 2.54 
-    figsize=(5 * cm, 4 * cm)
+    figsize_pic = (3 * cm, 2.4 * cm)
+    figsize_hist = (3 * cm, 1.7 * cm)
     output_path = "/mnt/volume/Johanna_Velotest/results/velotest"
  
     for name, path in datasets.items():
@@ -237,19 +237,13 @@ def main():
 
         adata = sc.read(config['path'])
         dataset_name = config['dataset_name']
-        ori_basis = config['basis']
-        if ori_basis == 'umap': # Adapted later to get velotest results for different embeddings
-            continue
-        sc.pp.neighbors(adata, n_neighbors=30) 
-        sc.tl.umap(adata)
-        scvelo.pl.velocity_embedding(adata, basis='umap')
-        basis = 'umap'  # config['basis']
+        basis = config['basis']
         neighbors = config['number_neighbors_to_sample_from']   
         cluster = config['cluster']
         cluster_colors = config['cluster_colors']
 
         #adata = scvelo_processing(adata, basis=basis, mode=mode)
-        plot_streamplot(adata, basis, output_path, dataset_name, cluster, cluster_colors, figsize=figsize)
+        plot_streamplot(adata, basis, output_path, dataset_name, cluster, cluster_colors, figsize=figsize_pic)
 
         # Run velotest
         uncorrected_p_values, h0_rejected, debug_dict = run_hypothesis_test_on(adata,
@@ -259,6 +253,7 @@ def main():
                                                                     correction="bonferroni",
                                                                     restrict_to_velocity_genes=True,
                                                                     exclusion_degree=10,
+                                                                    n_workers=18,
                                                                     basis=basis)
 
         statistics = debug_dict['statistics']
@@ -269,13 +264,13 @@ def main():
         non_empty_neighborhoods_indices = np.where(np.array(uncorrected_p_values) != 2)[0].astype(int)
 
         # Plot embedding with significant velocities highlighted
-        plot_significant_velocities(adata, basis, uncorrected_p_values, h0_rejected, output_path, dataset_name, cluster, cluster_colors, figsize=figsize)
-        plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name)
+        plot_significant_velocities(adata, basis, uncorrected_p_values, h0_rejected, output_path, dataset_name, cluster, cluster_colors, figsize=figsize_pic)
+        plot_histogramm_p_values(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name, figsize=figsize_hist)
 
         # Cumpute and plot test-optimal velocity
         adata_plotting, colors_plotting, color_dict_plotting = estimate_test_optimal_velocity(adata, basis, statistics, non_empty_neighborhoods_indices, cluster, cluster_colors)
-        plot_test_optimal_velocity(adata_plotting, basis, color_dict_plotting, colors_plotting, output_path, dataset_name, cluster, figsize=figsize)
-        best_possible_velocities_statistic = plot_best_possible_velocity(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name, figsize=figsize)
+        plot_test_optimal_velocity(adata_plotting, basis, color_dict_plotting, colors_plotting, output_path, dataset_name, cluster, figsize=figsize_pic)
+        best_possible_velocities_statistic = plot_best_possible_velocity(adata, basis, statistics, non_empty_neighborhoods_indices, output_path, dataset_name, figsize=figsize_pic)
         plot_histogram_best_possible_velocities(best_possible_velocities_statistic, output_path, dataset_name, basis)
 
 if __name__ == "__main__":
