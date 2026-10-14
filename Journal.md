@@ -9,12 +9,12 @@ To save computational time the velocity computation and embeddings were saved on
 - script/0331_dataPreparation.ipynb
 - script/0414_dataPreparation.ipynb
 
-The bounds were save to its respective data as well to save time:
+The bounds were saved to their respective data as well to save time:
 - script/0511_addData.ipynb
 
 *Run velotest:* 
 This code generated results of Chapter 4.1.  
-Here only one script was used and adpated to the specific test (dataset and embedding method)
+Here only one script was used and adapted to the specific test (dataset and embedding method).
 - script/0414_runVelotest
 
 To figure out the number of neighbors to use, this script was used: 
@@ -25,7 +25,7 @@ To figure out the number of neighbors to use, this script was used:
 
 *Compute Wasserstein distance between the velocity and the neighborhood-based upper bound:*
 This code generated results of Chapter 4.2.  
-The scirpts were adapted to fullfil the different computational tasks of testing different embedding methods with different hyperparameter settings. 
+The scripts were adapted to fulfill the different computational tasks of testing different embedding methods with different hyperparameter settings. 
 
 For the test-optimal velocity: 
 - script/0421_distances.py
@@ -34,14 +34,14 @@ For the test-optimal velocity:
 For the visualized velocity: 
 - script/0831_distance_Velocity_direction.py
 
-For VeloViz - the code was adated one for the test-optimal velocity and then change to the visualized velocity:
+For VeloViz - the code was adapted once for the test-optimal velocity and then changed to the visualized velocity:
 - script/0429_veloviz.R
 - script/0429_velo_distance_for_R.py
 
 For the subsampling (Chapter 4.3.3):
 - script/0616_downsampleDistance.py
 
-For primalry visualization of the results:
+For primary visualization of the results:
 - script/0529_plotsEmbeddingDistance.ipynb
 
 *Compute structure preservation metrics for embedding methods:*
@@ -53,7 +53,7 @@ This code generated results presented in Chapter 4.2.
 
 *Investigate the hyperparameter k (neighborhood size):*
 This code generated the results of Chapter 4.3.2.  
-To investigate the problem, first the bound was test with different settings of *k*:
+To investigate the problem, first the bound was tested with different settings of *k*:
 - script/0421_BoundNeighborSize.ipynb
 
 This is the main notebook with visualizations:
@@ -68,7 +68,7 @@ This code was used to generate the results of Chapter 4.3.1
 
 *Use the cosine similarity distribution:*
 This code was used to generate the results presented in Chapter 4.3.3 and to find a good way to present Chapter 3.8.  
-Note that in those notebooks also plots and computations that were not presented in the thesis are included
+Note that in those notebooks also plots and computations that were not presented in the thesis are included.
 - script/0617_proof.ipynb
 - script/0707_incompleteBeta.ipynb
 
@@ -84,11 +84,11 @@ We tried to figure out if there is a correlation between the significance value 
 
 - script/0423_sig_vs_distances.ipynb
 
-Further different approaches in the case of subsampling were used 
+Further different approaches in the case of subsampling were used.
 - script/0519_compute_k_subsets.py
 - script/0730_downsampleDistance_clutser.py
 
-Another approach was to investigate experimental facotrs with synthetic data. Therefore these file werer used: 
+Another approach was to investigate experimental factors with synthetic data. Therefore these files were used: 
 - script/0602_runSimulation.sh
 - script/0602_simulate_data.R
 - script/0602_velocity.py
